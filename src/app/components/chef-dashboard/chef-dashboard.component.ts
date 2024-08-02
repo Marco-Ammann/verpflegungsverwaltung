@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chef-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './chef-dashboard.component.html',
-  styleUrl: './chef-dashboard.component.scss'
+  styleUrls: ['./chef-dashboard.component.scss'],
 })
-export class ChefDashboardComponent {
-
-}
+export class ChefDashboardComponent {}
