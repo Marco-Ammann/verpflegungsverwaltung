@@ -1,0 +1,18 @@
+<mat-dialog-content>
+    <h2 mat-dialog-title>Login für {{ data.role }}</h2>
+    <form>
+        <mat-form-field appearance="fill">
+            <mat-label>Benutzername</mat-label>
+            <input matInput [(ngModel)]="username" name="username" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Passwort</mat-label>
+            <input matInput [(ngModel)]="password" name="password" type="password" />
+        </mat-form-field>
+        <div class="actions">
+            <button mat-raised-button color="primary" (click)="onLogin()">
+                Login
+            </button>
+        </div>
+    </form>
+</mat-dialog-content>
