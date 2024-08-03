@@ -6,7 +6,7 @@ import { MittagsdienstDashboardComponent } from './components/mittagsdienst-dash
 import { SchopfdienstDashboardComponent } from './components/schopfdienst-dashboard/schopfdienst-dashboard.component';
 import { OrderDashboardComponent } from './components/order-dashboard/order-dashboard.component';
 
-const routes: Route[] = [
+export const routes: Route[] = [
   { path: '', component: MainMenuComponent },
   { path: 'admin', component: AdminDashboardComponent },
   { path: 'chef', component: ChefDashboardComponent },
