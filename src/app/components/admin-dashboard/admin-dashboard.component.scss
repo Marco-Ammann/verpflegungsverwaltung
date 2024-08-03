@@ -3,6 +3,18 @@ h2 {
   margin-bottom: 20px;
 }
 
-p {
-  text-align: center;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+button {
+  align-self: center;
+}
+
+mat-list {
+  margin-top: 20px;
 }
