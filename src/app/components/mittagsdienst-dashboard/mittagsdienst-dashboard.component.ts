@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-mittagsdienst-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './mittagsdienst-dashboard.component.html',
-  styleUrl: './mittagsdienst-dashboard.component.scss'
+  styleUrls: ['./mittagsdienst-dashboard.component.scss'],
 })
-export class MittagsdienstDashboardComponent {
-
-}
+export class MittagsdienstDashboardComponent {}
