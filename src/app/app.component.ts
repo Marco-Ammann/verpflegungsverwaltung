@@ -1,14 +1,19 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 @Component({
   selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [RouterModule, MainMenuComponent, MatDialogModule, MatButtonModule],
-  template: `<router-outlet></router-outlet>`,
-  styleUrls: ['./app.component.scss']
+  imports: [
+    RouterModule,
+    MainMenuComponent,
+    AdminDashboardComponent
+  ]
 })
-export class AppComponent { }
+export class AppComponent {
+  title = 'verpflegungsverwaltung';
+}
