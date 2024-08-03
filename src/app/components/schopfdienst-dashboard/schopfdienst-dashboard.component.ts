@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-schopfdienst-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './schopfdienst-dashboard.component.html',
-  styleUrl: './schopfdienst-dashboard.component.scss'
+  styleUrls: ['./schopfdienst-dashboard.component.scss'],
 })
-export class SchopfdienstDashboardComponent {
-
-}
+export class SchopfdienstDashboardComponent {}
