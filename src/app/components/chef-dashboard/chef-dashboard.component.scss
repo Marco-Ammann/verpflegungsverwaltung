@@ -12,3 +12,23 @@ mat-card {
 mat-form-field {
   width: 100%;
 }
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: red;
+}
+
+.maxwidth600 {
+  max-width: 600px;
+}
+
+form {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+}
+
+button {
+  margin-bottom: 50px;
+}

@@ -1,13 +1,13 @@
-<h2>Menüplan Stiftung Bernaville</h2>
+<h2>Menüplan erstellen</h2>
 <form [formGroup]="weekPlanForm" (ngSubmit)="saveWeekPlan()">
-  <mat-form-field appearance="fill">
+  <mat-form-field class="maxwidth600" appearance="fill">
     <mat-label>Jahr</mat-label>
     <input matInput formControlName="year" type="number" required />
     <mat-error *ngIf="weekPlanForm.get('year')?.hasError('required')">
       Jahr ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="maxwidth600" appearance="fill">
     <mat-label>Kalenderwoche</mat-label>
     <input matInput formControlName="weekNumber" type="number" required />
     <mat-error *ngIf="weekPlanForm.get('weekNumber')?.hasError('required')">
