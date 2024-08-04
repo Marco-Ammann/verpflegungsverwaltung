@@ -1,26 +1,22 @@
-<h2>Menüplan erstellen</h2>
+<h2>Menüplan Stiftung Bernaville</h2>
 <form [formGroup]="weekPlanForm" (ngSubmit)="saveWeekPlan()">
-  <mat-form-field class="maxwidth600" appearance="fill">
-    <mat-label>Jahr</mat-label>
-    <input matInput formControlName="year" type="number" required />
-    <mat-error *ngIf="weekPlanForm.get('year')?.hasError('required')">
-      Jahr ist erforderlich
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="maxwidth600" appearance="fill">
-    <mat-label>Kalenderwoche</mat-label>
-    <input matInput formControlName="weekNumber" type="number" required />
-    <mat-error *ngIf="weekPlanForm.get('weekNumber')?.hasError('required')">
-      Kalenderwoche ist erforderlich
-    </mat-error>
-  </mat-form-field>
-  <button mat-raised-button (click)="loadWeekPlan()">Wochenplan laden</button>
+  <div formGroupName="weekInfo">
+    <mat-form-field appearance="fill">
+      <mat-label>Jahr</mat-label>
+      <input matInput formControlName="year" type="number" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Kalenderwoche</mat-label>
+      <input matInput formControlName="weekNumber" type="number" />
+    </mat-form-field>
+    <button mat-raised-button type="button" (click)="loadWeekPlan()">Wochenplan laden</button>
+  </div>
 
   <div formArrayName="days" class="day-cards">
-    <div *ngFor="let day of days.controls; let i = index" [formGroupName]="i">
+    <div *ngFor="let day of days.controls; let i=index" [formGroupName]="i">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-card-title>{{ day.get("date")?.value }}</mat-card-title>
+          <mat-card-title>{{ day.get('date')?.value }}</mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
@@ -29,17 +25,11 @@
           </mat-card-header>
           <mat-form-field appearance="fill">
             <mat-label>BV-Menü</mat-label>
-            <input matInput formControlName="bvMenu" required />
-            <mat-error *ngIf="day.get('bvMenu')?.hasError('required')">
-              BV-Menü ist erforderlich
-            </mat-error>
+            <input matInput formControlName="bvMenu" />
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Fleischlos</mat-label>
-            <input matInput formControlName="meatlessMenu" required />
-            <mat-error *ngIf="day.get('meatlessMenu')?.hasError('required')">
-              Fleischlos ist erforderlich
-            </mat-error>
+            <input matInput formControlName="meatlessMenu" />
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Dessert</mat-label>
@@ -51,21 +41,11 @@
           </mat-card-header>
           <mat-form-field appearance="fill">
             <mat-label>Abendessen</mat-label>
-            <input matInput formControlName="dinner" required />
-            <mat-error *ngIf="day.get('dinner')?.hasError('required')">
-              Abendessen ist erforderlich
-            </mat-error>
+            <input matInput formControlName="dinner" />
           </mat-form-field>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-    [disabled]="weekPlanForm.invalid"
-  >
-    Wochenplan speichern
-  </button>
+  <button mat-raised-button color="primary" type="submit">Wochenplan speichern</button>
 </form>
