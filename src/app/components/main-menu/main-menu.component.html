@@ -1,6 +1,16 @@
-<div class="main-menu">
-    <mat-card class="card" (click)="openLoginDialog('Admin')">Admin</mat-card>
-    <mat-card class="card" (click)="openLoginDialog('Mittagsdienst')">Mittagsdienst</mat-card>
-    <mat-card class="card" (click)="openLoginDialog('Schöpfdienst')">Schöpfdienst</mat-card>
-    <mat-card class="card" (click)="openLoginDialog('Bestellen')">Bestellen</mat-card>
+<div class="wrapper">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>Willkommen</mat-card-title>
+        <mat-card-subtitle> Logge dich ein, um loszulegen </mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="openLoginDialog()">
+        Login
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

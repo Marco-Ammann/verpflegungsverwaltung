@@ -1,40 +1,64 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatDialogModule,
-  ],
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    MatDialogModule,
+  ],
 })
 export class LoginDialogComponent {
-  username: string = '';
-  password: string = '';
+  loginForm: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<LoginDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { role: string }
-  ) {}
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<LoginDialogComponent>
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
 
-  onLogin(): void {
-    // Hier Authentifizierung logik einfügen
-    if (this.username && this.password) {
-      localStorage.setItem('userRole', this.data.role);
-      this.dialogRef.close();
+  login() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      this.authService
+        .login(email, password)
+        .then(() => {
+          this.snackBar.open('Login erfolgreich', 'Close', { duration: 3000 });
+          this.dialogRef.close();
+        })
+        .catch((error) => {
+          this.snackBar.open(
+            'Login fehlgeschlagen: ' + error.message,
+            'Close',
+            { duration: 3000 }
+          );
+        });
     }
   }
 }

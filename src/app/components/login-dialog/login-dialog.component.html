@@ -1,18 +1,21 @@
-<mat-dialog-content>
-    <h2 mat-dialog-title>Login für {{ data.role }}</h2>
-    <form>
-        <mat-form-field appearance="fill">
-            <mat-label>Benutzername</mat-label>
-            <input matInput [(ngModel)]="username" name="username" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Passwort</mat-label>
-            <input matInput [(ngModel)]="password" name="password" type="password" />
-        </mat-form-field>
-        <div class="actions">
-            <button mat-raised-button color="primary" (click)="onLogin()">
-                Login
-            </button>
-        </div>
-    </form>
-</mat-dialog-content>
+<h1>Login</h1>
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" type="email" />
+    <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+      >Email ist erforderlich</mat-error
+    >
+    <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
+      >Ungültige Email</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Passwort</mat-label>
+    <input matInput formControlName="password" type="password" />
+    <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+      >Passwort ist erforderlich</mat-error
+    >
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Login</button>
+</form>

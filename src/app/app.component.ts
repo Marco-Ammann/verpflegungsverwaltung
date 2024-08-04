@@ -5,14 +5,10 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
-  imports: [
-    RouterModule,
-    MainMenuComponent,
-    AdminDashboardComponent
-  ]
+  imports: [RouterModule, MainMenuComponent, AdminDashboardComponent],
 })
 export class AppComponent {
   title = 'verpflegungsverwaltung';
