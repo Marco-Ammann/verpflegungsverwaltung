@@ -14,6 +14,7 @@ import { WeekPlan } from '../../models/week-plan.model';
 import { startOfWeek, addDays, format, getISOWeek } from 'date-fns';
 import { de } from 'date-fns/locale';
 
+
 @Component({
   selector: 'app-chef-dashboard',
   standalone: true,
@@ -232,7 +233,7 @@ export class ChefDashboardComponent implements OnInit {
     this.days.clear();
     weekPlan.days.forEach(day => this.days.push(this.fb.group(day)));
   }
-  
+
 
   /**
    * Shows a snackbar message.

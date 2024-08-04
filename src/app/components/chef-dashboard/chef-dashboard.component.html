@@ -1,37 +1,40 @@
 <h2>Menüplan Stiftung Bernaville</h2>
 <form [formGroup]="weekPlanForm" (ngSubmit)="saveWeekPlan()">
   <div formGroupName="weekInfo">
-    <mat-form-field appearance="fill">
+    <mat-form-field color="warn" appearance="fill">
       <mat-label>Jahr</mat-label>
       <input matInput formControlName="year" type="number" />
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field color="warn" appearance="fill">
       <mat-label>Kalenderwoche</mat-label>
       <input matInput formControlName="weekNumber" type="number" />
     </mat-form-field>
-    <button mat-raised-button type="button" (click)="loadWeekPlan()">Wochenplan laden</button>
+    <button color="warn" mat-raised-button type="button" (click)="loadWeekPlan()">
+        <mat-icon>download</mat-icon>
+      Wochenplan laden
+    </button>
   </div>
 
   <div formArrayName="days" class="day-cards">
-    <div *ngFor="let day of days.controls; let i=index" [formGroupName]="i">
+    <div *ngFor="let day of days.controls; let i = index" [formGroupName]="i">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-card-title>{{ day.get('date')?.value }}</mat-card-title>
+          <mat-card-title>{{ day.get("date")?.value }}</mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
           <mat-card-header>
             <mat-card-subtitle>Mittagessen</mat-card-subtitle>
           </mat-card-header>
-          <mat-form-field appearance="fill">
+          <mat-form-field color="warn" appearance="fill">
             <mat-label>BV-Menü</mat-label>
             <input matInput formControlName="bvMenu" />
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field color="warn" appearance="fill">
             <mat-label>Fleischlos</mat-label>
             <input matInput formControlName="meatlessMenu" />
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field color="warn" appearance="fill">
             <mat-label>Dessert</mat-label>
             <input matInput formControlName="dessert" />
           </mat-form-field>
@@ -39,7 +42,7 @@
           <mat-card-header>
             <mat-card-subtitle>Abendessen</mat-card-subtitle>
           </mat-card-header>
-          <mat-form-field appearance="fill">
+          <mat-form-field color="warn" appearance="fill">
             <mat-label>Abendessen</mat-label>
             <input matInput formControlName="dinner" />
           </mat-form-field>
@@ -47,5 +50,8 @@
       </mat-card>
     </div>
   </div>
-  <button mat-raised-button color="primary" type="submit">Wochenplan speichern</button>
+  <button mat-flat-button color="warn" class="floating-btn" type="submit" >
+    <mat-icon>save</mat-icon>
+    Wochenplan speichern
+  </button>
 </form>

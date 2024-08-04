@@ -15,7 +15,7 @@ mat-form-field {
 h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: red;
+  color: rgb(226, 14, 14);
 }
 
 .maxwidth600 {
@@ -31,4 +31,17 @@ form {
 
 button {
   margin-bottom: 50px;
+}
+
+mat-icon {
+  margin: 0;
+}
+
+.floating-btn{
+  position: fixed;
+  right: 100px;
+  bottom: 50px;
+  padding: 25px;
+  font-size: 16px;
+  line-height: initial;
 }
