@@ -1,5 +1,8 @@
 <h2>Admin Dashboard</h2>
-<form [formGroup]="userForm" (ngSubmit)="editingUserId ? updateUser() : createUser()">
+<form
+  [formGroup]="userForm"
+  (ngSubmit)="editingUserId ? updateUser() : createUser()"
+>
   <mat-form-field appearance="fill">
     <mat-label>Vorname</mat-label>
     <input matInput formControlName="firstName" />
@@ -30,7 +33,12 @@
   <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" />
-    <mat-error *ngIf="userForm.get('email')?.hasError('required') && userForm.get('role')?.value !== 'Client'">
+    <mat-error
+      *ngIf="
+        userForm.get('email')?.hasError('required') &&
+        userForm.get('role')?.value !== 'Client'
+      "
+    >
       Email ist erforderlich
     </mat-error>
     <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">
@@ -44,8 +52,24 @@
       Passwort ist erforderlich
     </mat-error>
   </mat-form-field>
-  <button *ngIf="!editingUserId" mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">Benutzer erstellen</button>
-  <button *ngIf="editingUserId" mat-raised-button color="accent" type="submit" [disabled]="userForm.invalid">Benutzer aktualisieren</button>
+  <button
+    *ngIf="!editingUserId"
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="userForm.invalid"
+  >
+    Benutzer erstellen
+  </button>
+  <button
+    *ngIf="editingUserId"
+    mat-raised-button
+    color="accent"
+    type="submit"
+    [disabled]="userForm.invalid"
+  >
+    Benutzer aktualisieren
+  </button>
 </form>
 <mat-list>
   <mat-list-item *ngFor="let user of users">

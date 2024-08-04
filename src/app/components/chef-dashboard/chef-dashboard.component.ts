@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Firestore } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
@@ -30,8 +36,8 @@ import { de } from 'date-fns/locale';
     MatButtonModule,
     MatSelectModule,
     MatListModule,
-    MatIconModule
-  ]
+    MatIconModule,
+  ],
 })
 export class ChefDashboardComponent implements OnInit {
   weekPlanForm: FormGroup;
@@ -46,7 +52,7 @@ export class ChefDashboardComponent implements OnInit {
     this.weekPlanForm = this.fb.group({
       year: [currentDate.getFullYear(), Validators.required],
       weekNumber: [getISOWeek(currentDate), Validators.required],
-      days: this.fb.array([])
+      days: this.fb.array([]),
     });
   }
 
@@ -68,13 +74,15 @@ export class ChefDashboardComponent implements OnInit {
   addDaysControls(): void {
     const daysInWeek = 7;
     for (let i = 0; i < daysInWeek; i++) {
-      this.days.push(this.fb.group({
-        date: ['', Validators.required],
-        bvMenu: ['', Validators.required],
-        meatlessMenu: ['', Validators.required],
-        dinner: ['', Validators.required],
-        dessert: ['']
-      }));
+      this.days.push(
+        this.fb.group({
+          date: ['', Validators.required],
+          bvMenu: ['', Validators.required],
+          meatlessMenu: ['', Validators.required],
+          dinner: ['', Validators.required],
+          dessert: [''],
+        })
+      );
     }
     this.updateDates();
   }
@@ -83,13 +91,18 @@ export class ChefDashboardComponent implements OnInit {
     const year = this.weekPlanForm.get('year')?.value;
     const weekNumber = this.weekPlanForm.get('weekNumber')?.value;
     if (year && weekNumber) {
-      const startDate = startOfWeek(new Date(year, 0, (weekNumber - 1) * 7 + 1), { weekStartsOn: 1, locale: de });
+      const startDate = startOfWeek(
+        new Date(year, 0, (weekNumber - 1) * 7 + 1),
+        { weekStartsOn: 1, locale: de }
+      );
       for (let i = 0; i < 7; i++) {
         const date = addDays(startDate, i);
         const formattedDate = format(date, 'dd/MM/yyyy');
         const dayName = format(date, 'EEEE', { locale: de });
         const dayControl = this.days.at(i);
-        dayControl.get('date')?.setValue(`${dayName} ${formattedDate}`, { emitEvent: false });
+        dayControl
+          .get('date')
+          ?.setValue(`${dayName} ${formattedDate}`, { emitEvent: false });
       }
     }
   }
@@ -97,13 +110,20 @@ export class ChefDashboardComponent implements OnInit {
   saveWeekPlan(): void {
     if (this.weekPlanForm.valid) {
       const weekPlan: WeekPlan = this.weekPlanForm.value;
-      this.weekPlanService.saveWeekPlan(weekPlan)
+      this.weekPlanService
+        .saveWeekPlan(weekPlan)
         .then(() => {
-          this.snackBar.open('Week plan saved successfully', 'Close', { duration: 3000 });
+          this.snackBar.open('Week plan saved successfully', 'Close', {
+            duration: 3000,
+          });
           this.resetForm();
         })
-        .catch(error => {
-          this.snackBar.open('Error saving week plan: ' + error.message, 'Close', { duration: 3000 });
+        .catch((error) => {
+          this.snackBar.open(
+            'Error saving week plan: ' + error.message,
+            'Close',
+            { duration: 3000 }
+          );
         });
     } else {
       this.weekPlanForm.markAllAsTouched();
@@ -126,7 +146,7 @@ export class ChefDashboardComponent implements OnInit {
     // Mark controls as pristine and untouched
     this.weekPlanForm.markAsPristine();
     this.weekPlanForm.markAsUntouched();
-    this.days.controls.forEach(control => {
+    this.days.controls.forEach((control) => {
       control.markAsPristine();
       control.markAsUntouched();
     });
@@ -138,7 +158,10 @@ export class ChefDashboardComponent implements OnInit {
 
     this.resetForm();
 
-    const weekPlanExists = await this.weekPlanService.weekPlanExists(year, weekNumber);
+    const weekPlanExists = await this.weekPlanService.weekPlanExists(
+      year,
+      weekNumber
+    );
 
     if (weekPlanExists) {
       const weekPlan = await this.weekPlanService.getWeekPlan(year, weekNumber);
@@ -146,10 +169,12 @@ export class ChefDashboardComponent implements OnInit {
         this.weekPlan = weekPlan;
         this.weekPlanForm.patchValue(weekPlan);
         this.days.clear();
-        weekPlan.days.forEach(day => this.days.push(this.fb.group(day)));
+        weekPlan.days.forEach((day) => this.days.push(this.fb.group(day)));
       }
     } else {
-      this.snackBar.open('No week plan found for the selected week', 'Close', { duration: 3000 });
+      this.snackBar.open('No week plan found for the selected week', 'Close', {
+        duration: 3000,
+      });
     }
   }
 }

@@ -15,12 +15,12 @@
     </mat-error>
   </mat-form-field>
   <button mat-raised-button (click)="loadWeekPlan()">Wochenplan laden</button>
-  
+
   <div formArrayName="days" class="day-cards">
-    <div *ngFor="let day of days.controls; let i=index" [formGroupName]="i">
+    <div *ngFor="let day of days.controls; let i = index" [formGroupName]="i">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-card-title>{{ day.get('date')?.value }}</mat-card-title>
+          <mat-card-title>{{ day.get("date")?.value }}</mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
@@ -60,5 +60,12 @@
       </mat-card>
     </div>
   </div>
-  <button mat-raised-button color="primary" type="submit" [disabled]="weekPlanForm.invalid">Wochenplan speichern</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="weekPlanForm.invalid"
+  >
+    Wochenplan speichern
+  </button>
 </form>
