@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, doc, setDoc, getDoc, collection, collectionData, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { Auth, updateEmail, updatePassword, createUserWithEmailAndPassword, deleteUser } from '@angular/fire/auth';
+import { Auth, updateEmail, updatePassword, createUserWithEmailAndPassword, deleteUser, getAuth } from '@angular/fire/auth';
 import { User } from '../models/user.model';
 import { from, Observable } from 'rxjs';
 
@@ -49,9 +49,12 @@ export class UserService {
       getDoc(userDoc).then((docSnap) => {
         if (docSnap.exists()) {
           const userData = docSnap.data();
+          console.log(`Deleting user document with ID: ${userId}`);
           return deleteDoc(userDoc).then(() => {
             const userAuth = this.auth.currentUser;
+            console.log(`Current authenticated user ID: ${userAuth ? userAuth.uid : 'none'}`);
             if (userAuth && userAuth.uid === userId) {
+              console.log(`Deleting authenticated user with ID: ${userId}`);
               return deleteUser(userAuth);
             }
             return Promise.resolve();

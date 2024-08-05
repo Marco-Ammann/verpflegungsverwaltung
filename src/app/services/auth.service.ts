@@ -1,7 +1,5 @@
-// auth.service.ts
-
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, updateEmail, updatePassword, User as FirebaseUser } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, updateEmail, updatePassword, User as FirebaseUser, getAuth } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
 import { User } from '../models/user.model';
 
@@ -22,9 +20,14 @@ export class AuthService {
   }
 
   async registerUser(email: string, password: string, userData: User): Promise<void> {
-    const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+    const tempAuth = getAuth(); // Temporäre Authentifizierungsinstanz
+    await signOut(tempAuth); // Abmelden, falls ein Benutzer angemeldet ist
+
+    const userCredential = await createUserWithEmailAndPassword(tempAuth, email, password);
     userData.id = userCredential.user.uid;
     await this.saveUserData(userData);
+
+    await signOut(tempAuth); // Temporären Benutzer abmelden
   }
 
   async saveClientData(userData: User): Promise<void> {
