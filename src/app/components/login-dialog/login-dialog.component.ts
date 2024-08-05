@@ -1,31 +1,39 @@
-import { Component } from '@angular/core';
+// login-dialog.component.ts
+
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login-dialog',
+  standalone: true,
   templateUrl: './login-dialog.component.html',
   styleUrls: ['./login-dialog.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatButtonToggleModule
   ]
 })
-export class LoginDialogComponent {
+export class LoginDialogComponent implements OnInit {
   loginForm: FormGroup;
+  isClientLogin: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,48 +43,63 @@ export class LoginDialogComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      loginType: ['standard'],
+      emailOrShortcode: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  login() {
+  ngOnInit(): void {
+    this.loginForm.get('loginType')?.valueChanges.subscribe(value => {
+      this.isClientLogin = value === 'client';
+      this.loginForm.get('emailOrShortcode')?.reset();
+      this.loginForm.get('password')?.reset();
+    });
+  }
+
+  async login() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email, password)
-        .then(user => {
+      const { emailOrShortcode, password, loginType } = this.loginForm.value;
+      try {
+        let user: User | null = null;
+        if (this.isClientLogin) {
+          user = await this.authService.loginWithShortcode(emailOrShortcode, password);
           if (user) {
-            this.snackBar.open('Login erfolgreich', 'Close', { duration: 3000 });
+            this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
             this.dialogRef.close();
-            this.redirectUser(user.role);
+            this.router.navigate(['/order-dashboard']);
+          } else {
+            this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
           }
-        })
-        .catch(error => {
-          this.snackBar.open('Login fehlgeschlagen: ' + error.message, 'Close', { duration: 3000 });
-        });
+        } else {
+          user = await this.authService.login(emailOrShortcode, password);
+          if (user) {
+            this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
+            this.dialogRef.close();
+            this.redirectUser(user);
+          } else {
+            this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
+          }
+        }
+      } catch (error: any) {
+        this.snackBar.open('Login fehlgeschlagen: ' + error.message, 'Schließen', { duration: 3000 });
+      }
     }
   }
 
-  /**
-   * Redirects the user based on their role.
-   * @param role - The role of the user.
-   */
-  redirectUser(role: string) {
-    switch (role) {
+  redirectUser(user: User) {
+    switch (user.role) {
       case 'Admin':
         this.router.navigate(['/admin']);
         break;
       case 'Chef':
         this.router.navigate(['/chef']);
         break;
-      case 'Server':
-        this.router.navigate(['/schopfdienst']);
-        break;
       case 'Caretaker':
         this.router.navigate(['/mittagsdienst']);
         break;
-      case 'Client':
-        this.router.navigate(['/bestellen']);
+      case 'Server':
+        this.router.navigate(['/schopfdienst']);
         break;
       default:
         this.router.navigate(['/']);

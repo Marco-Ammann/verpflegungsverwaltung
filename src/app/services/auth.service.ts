@@ -1,6 +1,8 @@
+// auth.service.ts
+
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, updateEmail, updatePassword, User as FirebaseUser } from '@angular/fire/auth';
-import { Firestore, doc, getDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -45,17 +47,22 @@ export class AuthService {
     return setDoc(userDoc, user);
   }
 
-  /**
-   * Updates the email and password of a user in Firebase Authentication.
-   * @param email - The new email address of the user.
-   * @param password - The new password of the user.
-   * @returns A promise that resolves when the email and password are updated.
-   */
   async updateUser(email: string, password: string): Promise<void> {
     const user = this.auth.currentUser;
     if (user) {
       await updateEmail(user, email);
       await updatePassword(user, password);
     }
+  }
+
+  async loginWithShortcode(shortcode: string, password: string): Promise<User | null> {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('shortcode', '==', shortcode), where('password', '==', password));
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return null;
+    }
+    const userDoc = querySnapshot.docs[0];
+    return userDoc.data() as User;
   }
 }

@@ -1,21 +1,23 @@
-<h1>Login</h1>
+<h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="login()">
+  <mat-button-toggle-group formControlName="loginType" name="loginType">
+    <mat-button-toggle value="standard">Standard Login</mat-button-toggle>
+    <mat-button-toggle value="client">Klienten Login</mat-button-toggle>
+  </mat-button-toggle-group>
+
   <mat-form-field appearance="fill">
-    <mat-label>Email</mat-label>
-    <input matInput formControlName="email" type="email" />
-    <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
-      >Email ist erforderlich</mat-error
-    >
-    <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
-      >Ungültige Email</mat-error
-    >
+    <mat-label>{{ isClientLogin ? 'Kürzel' : 'Email' }}</mat-label>
+    <input matInput formControlName="emailOrShortcode" />
+    <mat-error *ngIf="loginForm.get('emailOrShortcode')?.hasError('required')">
+      {{ isClientLogin ? 'Kürzel' : 'Email' }} ist erforderlich
+    </mat-error>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Passwort</mat-label>
-    <input matInput formControlName="password" type="password" />
-    <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
-      >Passwort ist erforderlich</mat-error
-    >
+    <input matInput type="password" formControlName="password" />
+    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+      Passwort ist erforderlich
+    </mat-error>
   </mat-form-field>
-  <button mat-raised-button color="primary" type="submit">Login</button>
+  <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
 </form>
