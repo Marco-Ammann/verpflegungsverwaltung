@@ -7,7 +7,7 @@ export interface User {
   lastName: string;
   email: string;
   password: string;
-  role: 'Admin' | 'Chef' | 'Server' | 'Caretaker' | 'Client';
+  role: 'Admin' | 'Kuechenchef' | 'Servicemitarbeiter' | 'Betreuuer' | 'Klient';
   birthYear?: string; // Optionales Feld für Klienten
   shortcode?: string; // Optionales Feld für Klienten
 }

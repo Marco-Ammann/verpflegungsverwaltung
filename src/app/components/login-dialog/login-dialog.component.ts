@@ -1,5 +1,3 @@
-// login-dialog.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { User } from '../../models/user.model';
 
@@ -28,7 +26,7 @@ import { User } from '../../models/user.model';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatButtonToggleModule
+    MatSlideToggleModule
   ]
 })
 export class LoginDialogComponent implements OnInit {
@@ -43,7 +41,7 @@ export class LoginDialogComponent implements OnInit {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      loginType: ['standard'],
+      loginType: [false],
       emailOrShortcode: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -51,7 +49,7 @@ export class LoginDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm.get('loginType')?.valueChanges.subscribe(value => {
-      this.isClientLogin = value === 'client';
+      this.isClientLogin = value;
       this.loginForm.get('emailOrShortcode')?.reset();
       this.loginForm.get('password')?.reset();
     });
@@ -92,14 +90,14 @@ export class LoginDialogComponent implements OnInit {
       case 'Admin':
         this.router.navigate(['/admin']);
         break;
-      case 'Chef':
-        this.router.navigate(['/chef']);
+      case 'Kuechenchef':
+        this.router.navigate(['/kuechenchef']);
         break;
-      case 'Caretaker':
+      case 'Betreuuer':
         this.router.navigate(['/mittagsdienst']);
         break;
-      case 'Server':
-        this.router.navigate(['/schopfdienst']);
+      case 'Servicemitarbeiter':
+        this.router.navigate(['/service']);
         break;
       default:
         this.router.navigate(['/']);

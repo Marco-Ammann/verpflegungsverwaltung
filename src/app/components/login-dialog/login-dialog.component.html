@@ -1,9 +1,8 @@
 <h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="login()">
-  <mat-button-toggle-group formControlName="loginType" name="loginType">
-    <mat-button-toggle value="standard">Standard Login</mat-button-toggle>
-    <mat-button-toggle value="client">Klienten Login</mat-button-toggle>
-  </mat-button-toggle-group>
+  <mat-slide-toggle formControlName="loginType" class="toggle">
+    Klient
+  </mat-slide-toggle>
 
   <mat-form-field appearance="fill">
     <mat-label>{{ isClientLogin ? 'Kürzel' : 'Email' }}</mat-label>

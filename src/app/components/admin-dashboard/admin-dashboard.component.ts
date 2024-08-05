@@ -60,7 +60,7 @@ export class AdminDashboardComponent implements OnInit {
   createUser(): void {
     if (this.userForm.valid) {
       const userData: User = this.userForm.value;
-      if (userData.role === 'Client') {
+      if (userData.role === 'Klient') {
         const password = this.generatePassword(userData.shortcode!, userData.birthYear?.toString() || '');
         userData.email = ''; // Keine Email für Klienten
         userData.password = password;
@@ -91,7 +91,7 @@ export class AdminDashboardComponent implements OnInit {
   updateUser(): void {
     if (this.userForm.valid && this.editingUserId) {
       const userData: User = { ...this.userForm.value, id: this.editingUserId };
-      if (userData.role === 'Client') {
+      if (userData.role === 'Klient') {
         this.userService.saveUser(userData)
           .then(() => {
             this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', { duration: 3000 });

@@ -22,29 +22,29 @@
     <mat-select formControlName="role">
       <mat-option value="Admin">Admin</mat-option>
       <mat-option value="Chef">Küchenchef</mat-option>
-      <mat-option value="Server">Schöpfdienst</mat-option>
+      <mat-option value="Server">Servicemitarbeiter</mat-option>
       <mat-option value="Caretaker">Betreuer</mat-option>
-      <mat-option value="Client">Klient</mat-option>
+      <mat-option value="Klient">Klient</mat-option>
     </mat-select>
     <mat-error *ngIf="userForm.get('role')?.hasError('required')">
       Rolle ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Client'">
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Klient'">
     <mat-label>Kürzel</mat-label>
     <input matInput formControlName="shortcode" />
     <mat-error *ngIf="userForm.get('shortcode')?.hasError('required')">
       Kürzel ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Client'">
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Klient'">
     <mat-label>Geburtsjahr</mat-label>
     <input matInput formControlName="birthYear" type="number" />
     <mat-error *ngIf="userForm.get('birthYear')?.hasError('required')">
       Geburtsjahr ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Client'">
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" />
     <mat-error *ngIf="userForm.get('email')?.hasError('required')">
@@ -54,7 +54,7 @@
       Ungültige Email
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Client'">
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
     <mat-label>Passwort</mat-label>
     <input matInput formControlName="password" type="password" />
     <mat-error *ngIf="userForm.get('password')?.hasError('required')">
