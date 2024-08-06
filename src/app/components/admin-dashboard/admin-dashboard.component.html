@@ -30,30 +30,21 @@
       Rolle ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field
-    appearance="fill"
-    *ngIf="userForm.get('role')?.value === 'Klient'"
-  >
+  <mat-form-field appearance="fill">
     <mat-label>Kürzel</mat-label>
     <input matInput formControlName="shortcode" />
     <mat-error *ngIf="userForm.get('shortcode')?.hasError('required')">
       Kürzel ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field
-    appearance="fill"
-    *ngIf="userForm.get('role')?.value === 'Klient'"
-  >
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Klient'">
     <mat-label>Geburtsjahr</mat-label>
     <input matInput formControlName="birthYear" type="number" />
     <mat-error *ngIf="userForm.get('birthYear')?.hasError('required')">
       Geburtsjahr ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field
-    appearance="fill"
-    *ngIf="userForm.get('role')?.value !== 'Klient'"
-  >
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" />
     <mat-error *ngIf="userForm.get('email')?.hasError('required')">
@@ -63,10 +54,7 @@
       Ungültige Email
     </mat-error>
   </mat-form-field>
-  <mat-form-field
-    appearance="fill"
-    *ngIf="userForm.get('role')?.value !== 'Klient'"
-  >
+  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
     <mat-label>Passwort</mat-label>
     <input matInput formControlName="password" type="password" />
     <mat-error *ngIf="userForm.get('password')?.hasError('required')">

@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,8 +26,8 @@ import { User } from '../../models/user.model';
     MatButtonModule,
     MatSlideToggleModule,
     MatDialogModule,
-    MatIconModule,
-  ],
+    MatIconModule
+  ]
 })
 export class LoginDialogComponent implements OnInit {
   loginForm: FormGroup;
@@ -48,12 +43,12 @@ export class LoginDialogComponent implements OnInit {
     this.loginForm = this.fb.group({
       loginType: [false],
       emailOrShortcode: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.loginForm.get('loginType')?.valueChanges.subscribe((value) => {
+    this.loginForm.get('loginType')?.valueChanges.subscribe(value => {
       this.isClientLogin = value;
       this.loginForm.get('emailOrShortcode')?.reset();
       this.loginForm.get('password')?.reset();
@@ -64,32 +59,21 @@ export class LoginDialogComponent implements OnInit {
     if (this.loginForm.valid) {
       const { emailOrShortcode, password, loginType } = this.loginForm.value;
       try {
-        let user = null;
+        let user: User | null = null;
         if (this.isClientLogin) {
-          user = await this.authService.loginWithShortcode(
-            emailOrShortcode,
-            password
-          );
+          user = await this.authService.loginWithShortcode(emailOrShortcode, password);
         } else {
-          user = await this.authService.login(emailOrShortcode, password);
+          user = await this.authService.loginWithEmail(emailOrShortcode, password);
         }
         if (user) {
-          this.snackBar.open('Login erfolgreich', 'Schließen', {
-            duration: 3000,
-          });
+          this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
           this.dialogRef.close();
           this.redirectUser(user);
         } else {
-          this.snackBar.open('Login fehlgeschlagen', 'Schließen', {
-            duration: 3000,
-          });
+          this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
         }
       } catch (error: any) {
-        this.snackBar.open(
-          'Login fehlgeschlagen: ' + error.message,
-          'Schließen',
-          { duration: 3000 }
-        );
+        this.snackBar.open('Login fehlgeschlagen: ' + error.message, 'Schließen', { duration: 3000 });
       }
     }
   }
