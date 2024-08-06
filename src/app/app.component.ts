@@ -17,11 +17,12 @@ export class AppComponent implements OnInit {
   constructor(private adminInitializationService: AdminInitializationService) {}
 
   ngOnInit(): void {
-    this.adminInitializationService.initializeAdmin()
+    this.adminInitializationService
+      .initializeAdmin()
       .then(() => {
         console.log('Admin account initialized if no users existed.');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error initializing admin account:', error);
       });
   }

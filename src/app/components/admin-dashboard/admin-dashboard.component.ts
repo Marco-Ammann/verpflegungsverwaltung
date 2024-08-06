@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
@@ -28,8 +33,8 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
     MatButtonModule,
     MatSelectModule,
     MatListModule,
-    MatIconModule
-  ]
+    MatIconModule,
+  ],
 })
 export class AdminDashboardComponent implements OnInit {
   userForm: FormGroup;
@@ -52,7 +57,7 @@ export class AdminDashboardComponent implements OnInit {
       email: [''],
       password: [''],
       birthYear: [''],
-      shortcode: ['']
+      shortcode: [''],
     });
   }
 
@@ -69,31 +74,51 @@ export class AdminDashboardComponent implements OnInit {
     if (this.userForm.valid) {
       const userData: User = this.userForm.value;
       if (userData.role === 'Klient') {
-        const password = this.generatePassword(userData.shortcode!, userData.birthYear?.toString() || '');
+        const password = this.generatePassword(
+          userData.shortcode!,
+          userData.birthYear?.toString() || ''
+        );
         userData.email = ''; // Keine Email für Klienten
         userData.password = password;
         userData.id = doc(collection(this.firestore, 'users')).id; // Generiere eine eindeutige ID
-        this.userService.saveUser(userData)
+        this.userService
+          .saveUser(userData)
           .then(() => {
-            this.snackBar.open(`Benutzer erstellt: ${userData.shortcode} / ${password}`, 'Close', { duration: 5000 });
+            this.snackBar.open(
+              `Benutzer erstellt: ${userData.shortcode} / ${password}`,
+              'Close',
+              { duration: 5000 }
+            );
             console.log('User created:', userData);
             this.resetForm();
             this.loadUsers();
           })
-          .catch(error => {
-            this.snackBar.open('Fehler beim Erstellen des Benutzers: ' + error.message, 'Close', { duration: 3000 });
+          .catch((error) => {
+            this.snackBar.open(
+              'Fehler beim Erstellen des Benutzers: ' + error.message,
+              'Close',
+              { duration: 3000 }
+            );
             console.error('Error creating user:', error);
           });
       } else {
-        this.authService.registerUser(userData.email, userData.password, userData)
+        userData.id = doc(collection(this.firestore, 'users')).id; // Generiere eine eindeutige ID
+        this.userService
+          .saveUser(userData)
           .then(() => {
-            this.snackBar.open('Benutzer erfolgreich erstellt', 'Close', { duration: 3000 });
+            this.snackBar.open('Benutzer erfolgreich erstellt', 'Close', {
+              duration: 3000,
+            });
             console.log('User created:', userData);
             this.resetForm();
             this.loadUsers();
           })
-          .catch(error => {
-            this.snackBar.open('Fehler beim Erstellen des Benutzers: ' + error.message, 'Close', { duration: 3000 });
+          .catch((error) => {
+            this.snackBar.open(
+              'Fehler beim Erstellen des Benutzers: ' + error.message,
+              'Close',
+              { duration: 3000 }
+            );
             console.error('Error creating user:', error);
           });
       }
@@ -103,41 +128,61 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   updateUser(): void {
-    console.log('Updating user with ID:', this.editingUserId, 'with data:', this.userForm.value);
+    console.log(
+      'Updating user with ID:',
+      this.editingUserId,
+      'with data:',
+      this.userForm.value
+    );
     if (this.userForm.valid && this.editingUserId) {
       const userData: User = { ...this.userForm.value, id: this.editingUserId };
       if (userData.role === 'Klient') {
-        this.userService.saveUser(userData)
+        this.userService
+          .saveUser(userData)
           .then(() => {
-            this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', { duration: 3000 });
+            this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', {
+              duration: 3000,
+            });
             console.log('User updated:', userData);
             this.resetForm();
             this.loadUsers();
             this.editingUserId = null;
           })
-          .catch(error => {
-            this.snackBar.open('Fehler beim Aktualisieren des Benutzers: ' + error.message, 'Close', { duration: 3000 });
+          .catch((error) => {
+            this.snackBar.open(
+              'Fehler beim Aktualisieren des Benutzers: ' + error.message,
+              'Close',
+              { duration: 3000 }
+            );
             console.error('Error updating user:', error);
           });
       } else {
-        this.authService.updateUser(userData.email, userData.password)
+        this.userService
+          .updateUser(userData)
           .then(() => {
-            return this.userService.updateUser(userData);
-          })
-          .then(() => {
-            this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', { duration: 3000 });
+            this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', {
+              duration: 3000,
+            });
             console.log('User updated:', userData);
             this.resetForm();
             this.loadUsers();
             this.editingUserId = null;
           })
-          .catch(error => {
-            this.snackBar.open('Fehler beim Aktualisieren des Benutzers: ' + error.message, 'Close', { duration: 3000 });
+          .catch((error) => {
+            this.snackBar.open(
+              'Fehler beim Aktualisieren des Benutzers: ' + error.message,
+              'Close',
+              { duration: 3000 }
+            );
             console.error('Error updating user:', error);
           });
       }
     } else {
-      console.error('Form is invalid or editingUserId is null:', this.userForm, this.editingUserId);
+      console.error(
+        'Form is invalid or editingUserId is null:',
+        this.userForm,
+        this.editingUserId
+      );
     }
   }
 
@@ -146,17 +191,33 @@ export class AdminDashboardComponent implements OnInit {
     console.log('Current authenticated user ID:', this.currentUser);
     if (this.currentUser !== userId) {
       console.log('Deleting user with ID:', userId);
-      this.userService.deleteUser(userId).subscribe(() => {
-        console.log('User with ID:', userId, 'deleted successfully');
-        this.snackBar.open('Benutzer erfolgreich gelöscht', 'Close', { duration: 3000 });
-        this.loadUsers();
-      }, error => {
-        console.error('Error deleting user with ID:', userId, 'Error:', error);
-        this.snackBar.open('Fehler beim Löschen des Benutzers: ' + error.message, 'Close', { duration: 3000 });
-      });
+      this.userService.deleteUser(userId).subscribe(
+        () => {
+          console.log('User with ID:', userId, 'deleted successfully');
+          this.snackBar.open('Benutzer erfolgreich gelöscht', 'Close', {
+            duration: 3000,
+          });
+          this.loadUsers();
+        },
+        (error) => {
+          console.error(
+            'Error deleting user with ID:',
+            userId,
+            'Error:',
+            error
+          );
+          this.snackBar.open(
+            'Fehler beim Löschen des Benutzers: ' + error.message,
+            'Close',
+            { duration: 3000 }
+          );
+        }
+      );
     } else {
       console.log('Cannot delete the current authenticated user');
-      this.snackBar.open('Du kannst dich nicht selbst löschen!', 'Close', { duration: 3000 });
+      this.snackBar.open('Du kannst dich nicht selbst löschen!', 'Close', {
+        duration: 3000,
+      });
     }
   }
 
@@ -168,7 +229,7 @@ export class AdminDashboardComponent implements OnInit {
 
   private loadUsers(): void {
     console.log('Loading users...');
-    this.userService.getUsers().subscribe(users => {
+    this.userService.getUsers().subscribe((users) => {
       this.users = users;
       console.log('Users loaded:', users);
     });
@@ -178,7 +239,7 @@ export class AdminDashboardComponent implements OnInit {
     this.userForm.reset();
     this.userForm.markAsPristine();
     this.userForm.markAsUntouched();
-    Object.keys(this.userForm.controls).forEach(key => {
+    Object.keys(this.userForm.controls).forEach((key) => {
       this.userForm.get(key)?.setErrors(null);
     });
   }

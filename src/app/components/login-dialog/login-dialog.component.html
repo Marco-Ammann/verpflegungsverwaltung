@@ -1,22 +1,28 @@
 <h2>Login</h2>
 <form [formGroup]="loginForm" (ngSubmit)="login()">
-  <mat-slide-toggle formControlName="loginType" class="toggle">
-    Klient
+  <mat-slide-toggle formControlName="loginType">
+    Login mit Kürzel
   </mat-slide-toggle>
-
   <mat-form-field appearance="fill">
-    <mat-label>{{ isClientLogin ? 'Kürzel' : 'Email' }}</mat-label>
+    <mat-label>{{ isClientLogin ? "Kürzel" : "Email" }}</mat-label>
     <input matInput formControlName="emailOrShortcode" />
     <mat-error *ngIf="loginForm.get('emailOrShortcode')?.hasError('required')">
-      {{ isClientLogin ? 'Kürzel' : 'Email' }} ist erforderlich
+      {{ isClientLogin ? "Kürzel" : "Email" }} ist erforderlich
     </mat-error>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Passwort</mat-label>
-    <input matInput type="password" formControlName="password" />
+    <input matInput formControlName="password" type="password" />
     <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
       Passwort ist erforderlich
     </mat-error>
   </mat-form-field>
-  <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    [disabled]="loginForm.invalid"
+  >
+    Login
+  </button>
 </form>

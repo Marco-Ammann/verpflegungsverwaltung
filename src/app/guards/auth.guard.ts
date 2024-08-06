@@ -6,10 +6,14 @@ import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: Auth, private router: Router, private authService: AuthService) {}
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   /**
    * Determines if a route can be activated based on the user's authentication state.
@@ -17,7 +21,7 @@ export class AuthGuard implements CanActivate {
    */
   canActivate(): Observable<boolean> {
     return this.authState$.pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           return true;
         } else {
@@ -32,8 +36,8 @@ export class AuthGuard implements CanActivate {
    * Returns an observable of the authentication state.
    */
   private get authState$() {
-    return new Observable(subscriber => {
-      this.auth.onAuthStateChanged(user => subscriber.next(user));
+    return new Observable((subscriber) => {
+      this.auth.onAuthStateChanged((user) => subscriber.next(user));
     });
   }
 }

@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialogRef } from '@angular/material/dialog';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -21,13 +25,14 @@ import { User } from '../../models/user.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSlideToggleModule,
+    MatDialogModule,
     MatIconModule,
-    MatSnackBarModule,
-    MatSlideToggleModule
-  ]
+  ],
 })
 export class LoginDialogComponent implements OnInit {
   loginForm: FormGroup;
@@ -43,12 +48,12 @@ export class LoginDialogComponent implements OnInit {
     this.loginForm = this.fb.group({
       loginType: [false],
       emailOrShortcode: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.loginForm.get('loginType')?.valueChanges.subscribe(value => {
+    this.loginForm.get('loginType')?.valueChanges.subscribe((value) => {
       this.isClientLogin = value;
       this.loginForm.get('emailOrShortcode')?.reset();
       this.loginForm.get('password')?.reset();
@@ -59,28 +64,32 @@ export class LoginDialogComponent implements OnInit {
     if (this.loginForm.valid) {
       const { emailOrShortcode, password, loginType } = this.loginForm.value;
       try {
-        let user: User | null = null;
+        let user = null;
         if (this.isClientLogin) {
-          user = await this.authService.loginWithShortcode(emailOrShortcode, password);
-          if (user) {
-            this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
-            this.dialogRef.close();
-            this.router.navigate(['/order-dashboard']);
-          } else {
-            this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
-          }
+          user = await this.authService.loginWithShortcode(
+            emailOrShortcode,
+            password
+          );
         } else {
           user = await this.authService.login(emailOrShortcode, password);
-          if (user) {
-            this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
-            this.dialogRef.close();
-            this.redirectUser(user);
-          } else {
-            this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
-          }
+        }
+        if (user) {
+          this.snackBar.open('Login erfolgreich', 'Schließen', {
+            duration: 3000,
+          });
+          this.dialogRef.close();
+          this.redirectUser(user);
+        } else {
+          this.snackBar.open('Login fehlgeschlagen', 'Schließen', {
+            duration: 3000,
+          });
         }
       } catch (error: any) {
-        this.snackBar.open('Login fehlgeschlagen: ' + error.message, 'Schließen', { duration: 3000 });
+        this.snackBar.open(
+          'Login fehlgeschlagen: ' + error.message,
+          'Schließen',
+          { duration: 3000 }
+        );
       }
     }
   }
@@ -93,11 +102,14 @@ export class LoginDialogComponent implements OnInit {
       case 'Kuechenchef':
         this.router.navigate(['/kuechenchef']);
         break;
-      case 'Betreuuer':
+      case 'Betreuer':
         this.router.navigate(['/mittagsdienst']);
         break;
       case 'Servicemitarbeiter':
         this.router.navigate(['/service']);
+        break;
+      case 'Klient':
+        this.router.navigate(['/bestellen']);
         break;
       default:
         this.router.navigate(['/']);

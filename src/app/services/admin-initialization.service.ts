@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocs, doc, setDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+} from '@angular/fire/firestore';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { User } from '../models/user.model';
 import { environment } from '../enviroment/enviroment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminInitializationService {
   constructor(private firestore: Firestore, private auth: Auth) {}
@@ -18,14 +24,19 @@ export class AdminInitializationService {
       const adminPassword = environment.adminPassword;
       const adminData: User = {
         id: '',
+        shortcode: 'Admin',
         firstName: 'Admin',
         lastName: 'User',
         email: adminEmail,
         password: adminPassword,
-        role: 'Admin'
+        role: 'Admin',
       };
 
-      const userCredential = await createUserWithEmailAndPassword(this.auth, adminEmail, adminPassword);
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        adminEmail,
+        adminPassword
+      );
       adminData.id = userCredential.user.uid;
 
       const userDoc = doc(this.firestore, `users/${userCredential.user.uid}`);

@@ -9,11 +9,31 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Route[] = [
   { path: '', component: MainMenuComponent },
-  { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'kuechenchef', component: ChefDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'mittagsdienst', component: MittagsdienstDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'service', component: ServiceDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'order-dashboard', component: OrderDashboardComponent, canActivate: [AuthGuard] }
+  {
+    path: 'admin',
+    component: AdminDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'kuechenchef',
+    component: ChefDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'mittagsdienst',
+    component: MittagsdienstDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'service',
+    component: ServiceDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'bestellen',
+    component: OrderDashboardComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 export const appRoutes = provideRouter(routes);
