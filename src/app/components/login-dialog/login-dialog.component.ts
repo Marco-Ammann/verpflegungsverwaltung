@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../models/user.model';
+import { UserInterface } from '../../models/user.model';
 
 @Component({
   selector: 'app-login-dialog',
@@ -59,7 +59,7 @@ export class LoginDialogComponent implements OnInit {
     if (this.loginForm.valid) {
       const { emailOrShortcode, password, loginType } = this.loginForm.value;
       try {
-        let user: User | null = null;
+        let user: UserInterface | null = null;
         if (this.isClientLogin) {
           user = await this.authService.loginWithShortcode(emailOrShortcode, password);
         } else {
@@ -78,7 +78,7 @@ export class LoginDialogComponent implements OnInit {
     }
   }
 
-  redirectUser(user: User) {
+  redirectUser(user: UserInterface) {
     switch (user.role) {
       case 'Admin':
         this.router.navigate(['/admin']);

@@ -10,7 +10,7 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { Auth, deleteUser } from '@angular/fire/auth';
-import { User } from '../models/user.model';
+import { UserInterface } from '../models/user.model';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -19,17 +19,17 @@ import { from, Observable } from 'rxjs';
 export class UserService {
   constructor(private firestore: Firestore, private auth: Auth) {}
 
-  createUser(user: User): Observable<void> {
+  createUser(user: UserInterface): Observable<void> {
     const userDoc = doc(this.firestore, `users/${user.id}`);
     return from(setDoc(userDoc, user));
   }
 
-  saveUser(user: User): Promise<void> {
+  saveUser(user: UserInterface): Promise<void> {
     const userDoc = doc(this.firestore, `users/${user.id}`);
     return setDoc(userDoc, user);
   }
 
-  updateUser(user: User): Promise<void> {
+  updateUser(user: UserInterface): Promise<void> {
     const userDoc = doc(this.firestore, `users/${user.id}`);
     const updatePromises = [updateDoc(userDoc, { ...user })];
 
@@ -61,19 +61,19 @@ export class UserService {
     );
   }
 
-  getUser(userId: string): Observable<User | undefined> {
+  getUser(userId: string): Observable<UserInterface | undefined> {
     const userDoc = doc(this.firestore, `users/${userId}`);
     return from(
       getDoc(userDoc).then((docSnap) =>
-        docSnap.exists() ? (docSnap.data() as User) : undefined
+        docSnap.exists() ? (docSnap.data() as UserInterface) : undefined
       )
     );
   }
 
-  getUsers(): Observable<User[]> {
+  getUsers(): Observable<UserInterface[]> {
     const usersCollection = collection(this.firestore, 'users');
     return collectionData(usersCollection, { idField: 'id' }) as Observable<
-      User[]
+      UserInterface[]
     >;
   }
 }

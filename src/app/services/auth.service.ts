@@ -1,15 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Firestore, doc, getDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
-import { User } from '../models/user.model';
+import { Auth, signOut, User } from '@angular/fire/auth';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { UserInterface } from '../models/user.model';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  private authStatus = new BehaviorSubject<boolean>(false);
 
-  async loginWithEmail(email: string, password: string): Promise<User | null> {
+  constructor(private auth: Auth, private firestore: Firestore) {
+    this.auth.onAuthStateChanged((user: User | null) => {
+      this.authStatus.next(!!user);
+    });
+  }
+
+  /**
+   * Returns an observable indicating whether the user is authenticated.
+   */
+  isAuthenticated(): Observable<boolean> {
+    return this.authStatus.asObservable();
+  }
+
+  async loginWithEmail(email: string, password: string): Promise<UserInterface | null> {
     const usersRef = collection(this.firestore, 'users');
     const q = query(usersRef, where('email', '==', email), where('password', '==', password));
     const querySnapshot = await getDocs(q);
@@ -17,10 +31,11 @@ export class AuthService {
       return null;
     }
     const userDoc = querySnapshot.docs[0];
-    return userDoc.data() as User;
+    this.authStatus.next(true);
+    return userDoc.data() as UserInterface;
   }
 
-  async loginWithShortcode(shortcode: string, password: string): Promise<User | null> {
+  async loginWithShortcode(shortcode: string, password: string): Promise<UserInterface | null> {
     const usersRef = collection(this.firestore, 'users');
     const q = query(usersRef, where('shortcode', '==', shortcode), where('password', '==', password));
     const querySnapshot = await getDocs(q);
@@ -28,10 +43,12 @@ export class AuthService {
       return null;
     }
     const userDoc = querySnapshot.docs[0];
-    return userDoc.data() as User;
+    this.authStatus.next(true);
+    return userDoc.data() as UserInterface;
   }
 
   logout(): Promise<void> {
+    this.authStatus.next(false);
     return signOut(this.auth);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user.model';
+import { UserInterface } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Firestore, doc, collection } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { AuthService } from '../../services/auth.service';
+import { RedirectCommand, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -32,16 +34,18 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 })
 export class AdminDashboardComponent implements OnInit {
   userForm: FormGroup;
-  users: User[] = [];
+  users: UserInterface[] = [];
   editingUserId: string | null = null;
   currentUser: string | null = null;
+  isLoggedIn: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private userService: UserService,
     private firestore: Firestore,
-    private auth: Auth
+    private authService: AuthService,
+    private router: Router
   ) {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -56,16 +60,21 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
-    onAuthStateChanged(this.auth, (user) => {
-      this.currentUser = user?.uid || null;
-      console.log('Current authenticated user ID:', this.currentUser);
+
+    this.authService.isAuthenticated().subscribe((authenticated) => {
+      this.isLoggedIn = authenticated;
+      if (!this.isLoggedIn) {
+        this.snackBar.open('Sie müssen angemeldet sein, um diese Aktion durchzuführen.', 'Close', { duration: 3000 });
+        this.router.navigate(['/']);
+      }
     });
+
   }
 
   createUser(): void {
     console.log('Creating user with data:', this.userForm.value);
     if (this.userForm.valid) {
-      const userData: User = this.userForm.value;
+      const userData: UserInterface = this.userForm.value;
       if (userData.role === 'Klient') {
         const password = this.generatePassword(userData.shortcode!, userData.birthYear?.toString() || '');
         userData.email = ''; // Keine Email für Klienten
@@ -91,7 +100,7 @@ export class AdminDashboardComponent implements OnInit {
   updateUser(): void {
     console.log('Updating user with ID:', this.editingUserId, 'with data:', this.userForm.value);
     if (this.userForm.valid && this.editingUserId) {
-      const userData: User = { ...this.userForm.value, id: this.editingUserId };
+      const userData: UserInterface = { ...this.userForm.value, id: this.editingUserId };
       this.userService.saveUser(userData)
         .then(() => {
           this.snackBar.open('Benutzer erfolgreich aktualisiert', 'Close', { duration: 3000 });
@@ -128,7 +137,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  editUser(user: User): void {
+  editUser(user: UserInterface): void {
     console.log('Editing user:', user);
     this.editingUserId = user.id;
     this.userForm.patchValue(user);

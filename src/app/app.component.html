@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<mat-drawer-container class="main-wrapper" hasBackdrop="true">
+  <mat-drawer #drawer mode="side">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row> das </mat-toolbar-row>
+      <mat-toolbar-row> ist </mat-toolbar-row>
+    </mat-toolbar>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <mat-toolbar>
+      <button
+        (click)="drawer.toggle()"
+        mat-icon-button
+        aria-label="Example icon-button with menu icon"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1>Choscht.</h1>
+      <app-header></app-header>
+    </mat-toolbar>
+
+    <div class="routerContainer">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

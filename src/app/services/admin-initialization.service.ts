@@ -7,7 +7,7 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { User } from '../models/user.model';
+import { UserInterface } from '../models/user.model';
 import { environment } from '../enviroment/enviroment';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class AdminInitializationService {
     if (userDocs.empty) {
       const adminEmail = environment.adminEmail;
       const adminPassword = environment.adminPassword;
-      const adminData: User = {
+      const adminData: UserInterface = {
         id: '',
         shortcode: 'Admin',
         firstName: 'Admin',

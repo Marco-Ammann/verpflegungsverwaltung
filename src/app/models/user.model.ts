@@ -1,7 +1,7 @@
 /**
  * User interface representing a user object.
  */
-export interface User {
+export interface UserInterface {
   id: string;
   firstName: string;
   lastName: string;
