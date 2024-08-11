@@ -1,7 +1,7 @@
 <mat-toolbar>
   <mat-toolbar-row>
     <button
-      color="primary"
+      color="disabled"
       mat-fab
       extended
       *ngIf="!isLoggedIn"
@@ -10,7 +10,7 @@
       <mat-icon>login</mat-icon>
       Login
     </button>
-    <button *ngIf="isLoggedIn" mat-fab extended (click)="logout()">
+    <button color="disabled" *ngIf="isLoggedIn" mat-fab extended (click)="logout()">
       <mat-icon>logout</mat-icon>
       Logout
     </button>

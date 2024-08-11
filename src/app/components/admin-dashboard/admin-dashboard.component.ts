@@ -11,9 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Firestore, doc, collection } from '@angular/fire/firestore';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { AuthService } from '../../services/auth.service';
-import { RedirectCommand, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',

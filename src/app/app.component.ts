@@ -6,8 +6,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { HeaderComponent } from "./header/header.component";
-
+import { HeaderComponent } from './header/header.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,9 @@ import { HeaderComponent } from "./header/header.component";
     MatIconModule,
     MatToolbarModule,
     HeaderComponent,
-],
+    MatChipsModule,
+    MatDivider
+  ],
 })
 export class AppComponent implements OnInit {
   title = 'Choscht.';

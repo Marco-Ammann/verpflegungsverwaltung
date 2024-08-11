@@ -1,9 +1,15 @@
 <mat-drawer-container class="main-wrapper" hasBackdrop="true">
-  <mat-drawer #drawer mode="side">
-    <mat-toolbar color="primary">
-      <mat-toolbar-row> das </mat-toolbar-row>
-      <mat-toolbar-row> ist </mat-toolbar-row>
-    </mat-toolbar>
+  <mat-drawer class="mat-drawer-panel" #drawer mode="push">
+    <div class="logo">
+      <h1>Stiftung <br />Bernaville</h1>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="buttoncontainer">
+      <button color="disabled" mat-fab extended>Klick mich</button>
+      <button color="disabled" mat-fab extended>Klick mich</button>
+      <button color="disabled" mat-fab extended>Klick mich</button>
+    </div>
   </mat-drawer>
 
   <mat-drawer-content>
@@ -15,7 +21,7 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
-      <h1>Choscht.</h1>
+      <h1 class="title">Choscht.</h1>
       <app-header></app-header>
     </mat-toolbar>
 

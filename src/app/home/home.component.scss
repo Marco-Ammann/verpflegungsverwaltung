@@ -1,0 +1,52 @@
+.day-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+mat-card {
+  width: 100%;
+  margin: 10px 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(226, 14, 14);
+}
+
+.maxwidth600 {
+  max-width: 600px;
+}
+
+form {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+}
+
+button {
+  margin-bottom: 50px;
+}
+
+mat-icon {
+  margin: 0;
+}
+
+.floating-btn{
+  position: fixed;
+  right: 100px;
+  bottom: 50px;
+  padding: 25px;
+  font-size: 16px;
+  line-height: initial;
+}
+
+
+mat-card-subtitle {
+  margin: 12px 0 8px 0;
+}

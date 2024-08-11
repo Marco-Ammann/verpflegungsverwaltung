@@ -11,3 +11,45 @@ mat-toolbar {
   display: flex;
   justify-content: space-between;
 }
+
+.mat-drawer-panel {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  >button {
+    margin: 0 12px;
+  }
+
+  .logo{
+    width: 100%;
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    h1{
+      font-size: 30px;
+      font-weight: 500;
+
+    }
+  }
+}
+
+.buttoncontainer {
+  padding-top: 50px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  button{
+    color: red;
+    font-weight: 500;
+  }
+}
+
+.title{
+  font-size: 32px;
+  color: red;
+  font-weight: 600;
+  text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.30);
+}
