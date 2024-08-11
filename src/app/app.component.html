@@ -1,5 +1,5 @@
 <mat-drawer-container class="main-wrapper" hasBackdrop="true">
-  <mat-drawer class="mat-drawer-panel" #drawer mode="push">
+  <mat-drawer class="mat-drawer-panel" #drawer mode="over" autoFocus="false">
     <div class="logo">
       <h1>Stiftung <br />Bernaville</h1>
     </div>
@@ -15,6 +15,7 @@
   <mat-drawer-content>
     <mat-toolbar>
       <button
+      class="menu-btn"
         (click)="drawer.toggle()"
         mat-icon-button
         aria-label="Example icon-button with menu icon"
@@ -22,7 +23,28 @@
         <mat-icon>menu</mat-icon>
       </button>
       <h1 class="title">Choscht.</h1>
-      <app-header></app-header>
+      <div class="login-btn-container">
+        <button
+          color="disabled"
+          mat-fab
+          extended
+          *ngIf="!isLoggedIn"
+          (click)="openLoginDialog()"
+        >
+          <mat-icon>login</mat-icon>
+          Login
+        </button>
+        <button
+          color="disabled"
+          *ngIf="isLoggedIn"
+          mat-fab
+          extended
+          (click)="logout()"
+        >
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
     </mat-toolbar>
 
     <div class="routerContainer">

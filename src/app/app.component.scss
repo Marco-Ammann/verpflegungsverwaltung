@@ -12,6 +12,16 @@ mat-toolbar {
   justify-content: space-between;
 }
 
+.menu-btn {
+  color: red;
+}
+
+.login-btn-container{
+  button{
+    color: red;
+  }
+}
+
 .mat-drawer-panel {
   width: 200px;
   display: flex;
