@@ -1,15 +1,9 @@
-import { provideRouter, Route, Routes } from '@angular/router';
-import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { ChefDashboardComponent } from './components/chef-dashboard/chef-dashboard.component';
-import { MittagsdienstDashboardComponent } from './components/mittagsdienst-dashboard/mittagsdienst-dashboard.component';
-import { ServiceDashboardComponent } from './components/service-dashboard/service-dashboard.component';
-import { OrderDashboardComponent } from './components/order-dashboard/order-dashboard.component';
+import { provideRouter, Routes } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { inject } from '@angular/core';
 import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
-
   {
     path: '',
     component: HomeComponent,
@@ -17,29 +11,30 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminDashboardComponent,
+    loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     resolve: { title: () => inject(Title).setTitle('Admin | Choscht.') }
   },
   {
     path: 'kuechenchef',
-    component: ChefDashboardComponent,
+    loadComponent: () => import('./components/chef-dashboard/chef-dashboard.component').then(m => m.ChefDashboardComponent),
     resolve: { title: () => inject(Title).setTitle('Chuchischeff | Choscht.') }
   },
   {
     path: 'mittagsdienst',
-    component: MittagsdienstDashboardComponent,
+    loadComponent: () => import('./components/mittagsdienst-dashboard/mittagsdienst-dashboard.component').then(m => m.MittagsdienstDashboardComponent),
     resolve: { title: () => inject(Title).setTitle('Mittagsdiänscht | Choscht.') }
   },
   {
     path: 'service',
-    component: ServiceDashboardComponent,
+    loadComponent: () => import('./components/service-dashboard/service-dashboard.component').then(m => m.ServiceDashboardComponent),
     resolve: { title: () => inject(Title).setTitle('Service | Choscht.') }
   },
   {
     path: 'bestellen',
-    component: OrderDashboardComponent,
+    loadComponent: () => import('./components/order-dashboard/order-dashboard.component').then(m => m.OrderDashboardComponent),
     resolve: { title: () => inject(Title).setTitle('Bsteuuä | Choscht.') }
   },
   { path: '**', redirectTo: '' }
 ];
+
 export const appRoutes = provideRouter(routes);

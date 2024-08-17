@@ -30,6 +30,8 @@ import { UserInterface } from '../../models/user.model';
   ]
 })
 export class LoginDialogComponent implements OnInit {
+  private readonly SNACKBAR_DURATION = 3000;
+
   loginForm: FormGroup;
   isClientLogin: boolean = false;
 
@@ -59,45 +61,42 @@ export class LoginDialogComponent implements OnInit {
     if (this.loginForm.valid) {
       const { emailOrShortcode, password, loginType } = this.loginForm.value;
       try {
-        let user: UserInterface | null = null;
-        if (this.isClientLogin) {
-          user = await this.authService.loginWithShortcode(emailOrShortcode, password);
-        } else {
-          user = await this.authService.loginWithEmail(emailOrShortcode, password);
-        }
+        const user = await this.authenticateUser(emailOrShortcode, password);
         if (user) {
-          this.snackBar.open('Login erfolgreich', 'Schließen', { duration: 3000 });
-          this.dialogRef.close();
-          this.redirectUser(user);
+          this.handleLoginSuccess(user);
         } else {
-          this.snackBar.open('Login fehlgeschlagen', 'Schließen', { duration: 3000 });
+          this.handleLoginFailure('Login fehlgeschlagen');
         }
       } catch (error: any) {
-        this.snackBar.open('Login fehlgeschlagen: ' + error.message, 'Schließen', { duration: 3000 });
+        this.handleLoginFailure('Login fehlgeschlagen: ' + error.message);
       }
     }
   }
 
-  redirectUser(user: UserInterface) {
-    switch (user.role) {
-      case 'Admin':
-        this.router.navigate(['/admin']);
-        break;
-      case 'Kuechenchef':
-        this.router.navigate(['/kuechenchef']);
-        break;
-      case 'Betreuer':
-        this.router.navigate(['/mittagsdienst']);
-        break;
-      case 'Servicemitarbeiter':
-        this.router.navigate(['/service']);
-        break;
-      case 'Klient':
-        this.router.navigate(['/bestellen']);
-        break;
-      default:
-        this.router.navigate(['/']);
-        break;
-    }
+  private async authenticateUser(emailOrShortcode: string, password: string): Promise<UserInterface | null> {
+    return this.isClientLogin
+      ? this.authService.loginWithShortcode(emailOrShortcode, password)
+      : this.authService.loginWithEmail(emailOrShortcode, password);
+  }
+
+  private handleLoginSuccess(user: UserInterface) {
+    this.snackBar.open('Login erfolgreich', 'Schließen', { duration: this.SNACKBAR_DURATION });
+    this.dialogRef.close();
+    this.redirectUser(user);
+  }
+
+  private handleLoginFailure(message: string) {
+    this.snackBar.open(message, 'Schließen', { duration: this.SNACKBAR_DURATION });
+  }
+
+  private redirectUser(user: UserInterface) {
+    const routes = {
+      'Admin': '/admin',
+      'Kuechenchef': '/kuechenchef',
+      'Betreuer': '/mittagsdienst',
+      'Servicemitarbeiter': '/service',
+      'Klient': '/bestellen'
+    };
+    this.router.navigate([routes[user.role] || '/']);
   }
 }

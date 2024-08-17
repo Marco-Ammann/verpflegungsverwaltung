@@ -15,35 +15,39 @@
   <mat-drawer-content>
     <mat-toolbar>
       <button
-      class="menu-btn"
+        class="menu-btn"
         (click)="drawer.toggle()"
         mat-icon-button
-        aria-label="Example icon-button with menu icon"
+        aria-label="Toggle menu"
       >
         <mat-icon>menu</mat-icon>
       </button>
       <h1 class="title">Choscht.</h1>
       <div class="login-btn-container">
-        <button
-          color="disabled"
-          mat-fab
-          extended
-          *ngIf="!isLoggedIn"
-          (click)="openLoginDialog()"
-        >
-          <mat-icon>login</mat-icon>
-          Login
-        </button>
-        <button
-          color="disabled"
-          *ngIf="isLoggedIn"
-          mat-fab
-          extended
-          (click)="logout()"
-        >
-          <mat-icon>logout</mat-icon>
-          Logout
-        </button>
+        <ng-container *ngIf="!isLoggedIn; else loggedIn">
+          <button
+            color="disabled"
+            mat-fab
+            extended
+            (click)="openLoginDialog()"
+            aria-label="Login"
+          >
+            <mat-icon>login</mat-icon>
+            Login
+          </button>
+        </ng-container>
+        <ng-template #loggedIn>
+          <button
+            color="disabled"
+            mat-fab
+            extended
+            (click)="logout()"
+            aria-label="Logout"
+          >
+            <mat-icon>logout</mat-icon>
+            Logout
+          </button>
+        </ng-template>
       </div>
     </mat-toolbar>
 

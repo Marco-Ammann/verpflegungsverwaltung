@@ -1,2 +1,52 @@
-<h2>Bestellen Dashboard</h2>
-<p>Hier kannst du Menüs auswählen und Bestellungen aufgeben.</p>
+<h1>Bestellübersicht</h1>
+<ng-container *ngFor="let day of daysOfTheWeek; let i = index">
+  <mat-card appearance="outlined" class="day-card">
+    <mat-card-header>
+      <mat-card-title>{{ day.date }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="day-card-content">
+      <!-- Left side: Mittagessen -->
+      <mat-card appearance="outlined" class="menu-card">
+        <mat-card-header>
+          <mat-card-title>Mittagessen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <mat-label>BV-Menü</mat-label>
+            <mat-select [(ngModel)]="selectedMenus[i]" (selectionChange)="selectMenu(i, 'bvMenu')">
+              <mat-option [value]="'bvMenu'">{{ day.bvMenu.name }}</mat-option>
+              <mat-option [value]="'meatlessMenu'">{{ day.meatlessMenu.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-footer>
+          <mat-card-header>
+            <mat-card-subtitle>Dessert</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>{{ day.dessert.name }}</mat-card-content>
+        </mat-card-footer>
+      </mat-card>
+
+      <mat-divider vertical="true"></mat-divider>
+
+      <!-- Right side: Abendessen -->
+      <mat-card appearance="outlined" class="dinner">
+        <mat-card-header>
+          <mat-card-title>Abendessen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <mat-label>Abendessen</mat-label>
+            <mat-select [(ngModel)]="selectedMenus[i]" (selectionChange)="selectMenu(i, 'dinner')">
+              <mat-option [value]="'dinner'">{{ day.dinner.name }}</mat-option>
+              <mat-option [value]="'noDinner'">Kein Abendessen</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</ng-container>

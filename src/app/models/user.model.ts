@@ -1,6 +1,4 @@
-/**
- * User interface representing a user object.
- */
+
 export interface UserInterface {
   id: string;
   firstName: string;

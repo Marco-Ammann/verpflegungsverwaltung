@@ -1,8 +1,5 @@
 <h2>Admin Dashboard</h2>
-<form
-  [formGroup]="userForm"
-  (ngSubmit)="editingUserId ? updateUser() : createUser()"
->
+<form [formGroup]="userForm" (ngSubmit)="editingUserId ? updateUser() : createUser()">
   <mat-form-field appearance="fill">
     <mat-label>Vorname</mat-label>
     <input matInput formControlName="firstName" />
@@ -10,6 +7,7 @@
       Vorname ist erforderlich
     </mat-error>
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Nachname</mat-label>
     <input matInput formControlName="lastName" />
@@ -17,6 +15,7 @@
       Nachname ist erforderlich
     </mat-error>
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Rolle</mat-label>
     <mat-select formControlName="role">
@@ -30,6 +29,7 @@
       Rolle ist erforderlich
     </mat-error>
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Kürzel</mat-label>
     <input matInput formControlName="shortcode" />
@@ -37,49 +37,46 @@
       Kürzel ist erforderlich
     </mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value === 'Klient'">
-    <mat-label>Geburtsjahr</mat-label>
-    <input matInput formControlName="birthYear" type="number" />
-    <mat-error *ngIf="userForm.get('birthYear')?.hasError('required')">
-      Geburtsjahr ist erforderlich
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
-    <mat-label>Email</mat-label>
-    <input matInput formControlName="email" />
-    <mat-error *ngIf="userForm.get('email')?.hasError('required')">
-      Email ist erforderlich
-    </mat-error>
-    <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">
-      Ungültige Email
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="userForm.get('role')?.value !== 'Klient'">
-    <mat-label>Passwort</mat-label>
-    <input matInput formControlName="password" type="password" />
-    <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-      Passwort ist erforderlich
-    </mat-error>
-  </mat-form-field>
-  <button
-    *ngIf="!editingUserId"
-    mat-raised-button
-    color="primary"
-    type="submit"
-    [disabled]="userForm.invalid"
-  >
+
+  <ng-container *ngIf="userForm.get('role')?.value === 'Klient'">
+    <mat-form-field appearance="fill">
+      <mat-label>Geburtsjahr</mat-label>
+      <input matInput formControlName="birthYear" type="number" />
+      <mat-error *ngIf="userForm.get('birthYear')?.hasError('required')">
+        Geburtsjahr ist erforderlich
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="userForm.get('role')?.value !== 'Klient'">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+        Email ist erforderlich
+      </mat-error>
+      <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">
+        Ungültige Email
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Passwort</mat-label>
+      <input matInput formControlName="password" type="password" />
+      <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+        Passwort ist erforderlich
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <button *ngIf="!editingUserId" mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">
     Benutzer erstellen
   </button>
-  <button
-    *ngIf="editingUserId"
-    mat-raised-button
-    color="accent"
-    type="submit"
-    [disabled]="userForm.invalid"
-  >
+  <button *ngIf="editingUserId" mat-raised-button color="accent" type="submit" [disabled]="userForm.invalid">
     Benutzer aktualisieren
   </button>
 </form>
+
 <mat-list>
   <mat-list-item *ngFor="let user of users">
     {{ user.firstName }} {{ user.lastName }} ({{ user.role }})

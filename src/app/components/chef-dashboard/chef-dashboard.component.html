@@ -10,7 +10,7 @@
       <input matInput formControlName="weekNumber" type="number" />
     </mat-form-field>
     <button color="warn" mat-raised-button type="button" (click)="loadWeekPlan()">
-        <mat-icon>download</mat-icon>
+      <mat-icon>download</mat-icon>
       Wochenplan laden
     </button>
   </div>
@@ -23,30 +23,38 @@
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
-            <mat-card-subtitle>Mittagessen</mat-card-subtitle>
-          <mat-form-field color="warn" appearance="fill">
-            <mat-label>BV-Menü</mat-label>
-            <input matInput formControlName="bvMenu" />
-          </mat-form-field>
-          <mat-form-field color="warn" appearance="fill">
-            <mat-label>Fleischlos</mat-label>
-            <input matInput formControlName="meatlessMenu" />
-          </mat-form-field>
-          <mat-form-field color="warn" appearance="fill">
-            <mat-label>Dessert</mat-label>
-            <input matInput formControlName="dessert" />
-          </mat-form-field>
+          <mat-card-subtitle>Mittagessen</mat-card-subtitle>
+          <div formGroupName="bvMenu">
+            <mat-form-field color="warn" appearance="fill">
+              <mat-label>BV-Menü</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </div>
+          <div formGroupName="meatlessMenu">
+            <mat-form-field color="warn" appearance="fill">
+              <mat-label>Fleischlos</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </div>
+          <div formGroupName="dessert">
+            <mat-form-field color="warn" appearance="fill">
+              <mat-label>Dessert</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </div>
           <mat-divider></mat-divider>
-            <mat-card-subtitle>Abendessen</mat-card-subtitle>
-          <mat-form-field color="warn" appearance="fill">
-            <mat-label>Abendessen</mat-label>
-            <input matInput formControlName="dinner" />
-          </mat-form-field>
+          <mat-card-subtitle>Abendessen</mat-card-subtitle>
+          <div formGroupName="dinner">
+            <mat-form-field color="warn" appearance="fill">
+              <mat-label>Abendessen</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
-  <button mat-flat-button color="warn" class="floating-btn" type="submit" >
+  <button mat-flat-button color="warn" class="floating-btn" type="submit">
     <mat-icon>save</mat-icon>
     Wochenplan speichern
   </button>

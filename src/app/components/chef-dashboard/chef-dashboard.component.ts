@@ -14,7 +14,6 @@ import { WeekPlan } from '../../models/week-plan.model';
 import { startOfWeek, addDays, format, getISOWeek } from 'date-fns';
 import { de } from 'date-fns/locale';
 
-
 @Component({
   selector: 'app-chef-dashboard',
   standalone: true,
@@ -45,16 +44,10 @@ export class ChefDashboardComponent implements OnInit {
     this.weekPlanForm = this.createForm();
   }
 
-
   ngOnInit(): void {
     this.initializeForm();
   }
 
-
-  /**
-   * Creates the initial form structure.
-   * @returns The FormGroup for the week plan form.
-   */
   createForm(): FormGroup {
     const currentDate = new Date();
     return this.fb.group({
@@ -66,61 +59,45 @@ export class ChefDashboardComponent implements OnInit {
     });
   }
 
-
-  /**
-   * Initializes the form by adding controls and setting up value change subscriptions.
-   */
   initializeForm(): void {
     this.addDaysControls();
-    this.weekPlanForm.get('weekInfo')?.get('weekNumber')?.valueChanges.subscribe(() => {
-      this.updateDates();
-    });
-    this.weekPlanForm.get('weekInfo')?.get('year')?.valueChanges.subscribe(() => {
-      this.updateDates();
-    });
+    this.subscribeToWeekInfoChanges();
     this.updateDates();
   }
 
-
-  /**
-   * Getter for the days FormArray.
-   * @returns The FormArray for the days.
-   */
   get days(): FormArray {
     return this.weekPlanForm.get('days') as FormArray;
   }
 
-
-  /**
-   * Adds FormGroup controls for each day of the week.
-   */
   addDaysControls(): void {
     const daysInWeek = 7;
     for (let i = 0; i < daysInWeek; i++) {
       this.days.push(this.createDayFormGroup());
     }
-    this.updateDates();
   }
 
-
-  /**
-   * Creates a FormGroup for a single day.
-   * @returns The FormGroup for a day.
-   */
   createDayFormGroup(): FormGroup {
     return this.fb.group({
       date: [''],
-      bvMenu: [''],
-      meatlessMenu: [''],
-      dinner: [''],
-      dessert: ['']
+      bvMenu: this.createMenuFormGroup(),
+      meatlessMenu: this.createMenuFormGroup(),
+      dessert: this.createMenuFormGroup(),
+      dinner: this.createMenuFormGroup()
     });
   }
 
 
-  /**
-   * Updates the date controls for each day based on the selected week number and year.
-   */
+  
+  createMenuFormGroup(): FormGroup {
+    return this.fb.group({
+      id: [''],
+      name: [''],
+      description: [''],
+      price: [0],
+      amount: [0]
+    });
+  }
+
   updateDates(): void {
     const year = this.weekPlanForm.get('weekInfo')?.get('year')?.value;
     const weekNumber = this.weekPlanForm.get('weekInfo')?.get('weekNumber')?.value;
@@ -132,12 +109,6 @@ export class ChefDashboardComponent implements OnInit {
     }
   }
 
-
-  /**
-   * Sets the date control for a specific day.
-   * @param index The index of the day in the FormArray.
-   * @param date The date to set.
-   */
   setDateControl(index: number, date: Date): void {
     const formattedDate = format(date, 'dd/MM/yyyy');
     const dayName = format(date, 'EEEE', { locale: de });
@@ -145,37 +116,24 @@ export class ChefDashboardComponent implements OnInit {
     dayControl.get('date')?.setValue(`${dayName} ${formattedDate}`, { emitEvent: false });
   }
 
-
-  /**
-   * Saves the current week plan to the database.
-   */
   saveWeekPlan(): void {
     const weekPlan = this.getWeekPlanFromForm();
     this.weekPlanService.saveWeekPlan(weekPlan)
       .then(() => {
-        this.showSnackBar('Week plan saved successfully');
-        this.resetForm();
+        this.showSnackBar('Wochenplan erfolgreich gespeichert');
       })
       .catch(error => {
-        this.showSnackBar('Error saving week plan: ' + error.message);
+        this.showSnackBar('Fehler beim Speichern des Wochenplans');
+        console.error(error);
       });
   }
 
-
-  /**
-   * Extracts the week plan data from the form.
-   * @returns The WeekPlan object.
-   */
   getWeekPlanFromForm(): WeekPlan {
     const weekInfo = this.weekPlanForm.get('weekInfo')?.value;
     const days = this.weekPlanForm.get('days')?.value;
     return { ...weekInfo, days: days };
   }
-  
 
-  /**
-   * Resets the form to its initial state.
-   */
   resetForm(): void {
     const year = this.weekPlanForm.get('weekInfo')?.get('year')?.value;
     const weekNumber = this.weekPlanForm.get('weekInfo')?.get('weekNumber')?.value;
@@ -190,10 +148,6 @@ export class ChefDashboardComponent implements OnInit {
     this.markFormPristineAndUntouched();
   }
 
-
-  /**
-   * Marks the form and its controls as pristine and untouched.
-   */
   markFormPristineAndUntouched(): void {
     this.weekPlanForm.markAsPristine();
     this.weekPlanForm.markAsUntouched();
@@ -203,10 +157,6 @@ export class ChefDashboardComponent implements OnInit {
     });
   }
 
-
-  /**
-   * Loads a week plan from the database.
-   */
   async loadWeekPlan(): Promise<void> {
     const year = this.weekPlanForm.get('weekInfo')?.get('year')?.value;
     const weekNumber = this.weekPlanForm.get('weekInfo')?.get('weekNumber')?.value;
@@ -223,23 +173,31 @@ export class ChefDashboardComponent implements OnInit {
     }
   }
 
-
-  /**
-   * Populates the form with data from a week plan.
-   * @param weekPlan The WeekPlan object.
-   */
   populateFormWithWeekPlan(weekPlan: WeekPlan): void {
     this.weekPlanForm.patchValue({ weekInfo: { year: weekPlan.year, weekNumber: weekPlan.weekNumber }, days: weekPlan.days });
     this.days.clear();
-    weekPlan.days.forEach(day => this.days.push(this.fb.group(day)));
+    weekPlan.days.forEach(day => {
+      const dayFormGroup = this.fb.group({
+        date: [day.date],
+        bvMenu: this.fb.group(day.bvMenu),
+        meatlessMenu: this.fb.group(day.meatlessMenu),
+        dinner: this.fb.group(day.dinner),
+        dessert: [day.dessert]
+      });
+      this.days.push(dayFormGroup);
+    });
   }
 
-
-  /**
-   * Shows a snackbar message.
-   * @param message The message to display.
-   */
   showSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', { duration: 3000 });
+  }
+
+  private subscribeToWeekInfoChanges(): void {
+    this.weekPlanForm.get('weekInfo')?.get('weekNumber')?.valueChanges.subscribe(() => {
+      this.updateDates();
+    });
+    this.weekPlanForm.get('weekInfo')?.get('year')?.valueChanges.subscribe(() => {
+      this.updateDates();
+    });
   }
 }

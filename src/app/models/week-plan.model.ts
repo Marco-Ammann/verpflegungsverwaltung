@@ -1,9 +1,11 @@
+import { Menu } from "./menu.model";
+
 export interface DayPlan {
   date: string;
-  bvMenu: string;
-  meatlessMenu: string;
+  bvMenu: Menu;
+  meatlessMenu: Menu;
   dinner: string;
-  dessert?: string;
+  dessert?: Menu;
 }
 
 export interface WeekPlan {

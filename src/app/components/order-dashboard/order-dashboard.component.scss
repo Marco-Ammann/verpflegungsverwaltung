@@ -1,8 +1,45 @@
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.day-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+
+  > .day-card-content {
+    display: flex;
+    justify-content: space-between;
+
+    > mat-card {
+      width: 48%;
+
+      .menu-item {
+        display: block;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.2s;
+
+        .menu-radio {
+          display: block;
+          cursor: pointer;
+          padding: 10px;
+          border-radius: 10px;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          }
+
+          mat-card-content {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 }
 
-p {
-  text-align: center;
+mat-divider {
+  margin: 16px 0;
+}
+
+.menu-item {
+  cursor: pointer;
 }

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminInitializationService } from './services/admin-initialization.service';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
-import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,9 +8,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDivider } from '@angular/material/divider';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
+import { AdminInitializationService } from './services/admin-initialization.service';
 import { AuthService } from './services/auth.service';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +21,6 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     RouterModule,
-    AdminDashboardComponent,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
@@ -35,7 +33,8 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   title = 'Choscht.';
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
+
   constructor(
     private adminInitializationService: AdminInitializationService,
     private authService: AuthService,
@@ -44,22 +43,34 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.adminInitializationService
-      .initializeAdmin()
+    this.initializeAdminAccount();
+    this.checkAuthenticationStatus();
+  }
+
+  private initializeAdminAccount(): void {
+    this.adminInitializationService.initializeAdmin()
       .then(() => {
         console.log('Admin account initialized if no users existed.');
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error('Error initializing admin account:', error);
+        this.snackBar.open('Error initializing admin account.', 'Close', { duration: 3000 });
       });
+  }
 
-    this.authService.isAuthenticated().subscribe((authenticated) => {
-      this.isLoggedIn = authenticated;
-      console.log('is logged in = ', this.isLoggedIn);
+  private checkAuthenticationStatus(): void {
+    this.authService.isAuthenticated().subscribe({
+      next: (authenticated: boolean) => {
+        this.isLoggedIn = authenticated;
+        console.log('is logged in = ', this.isLoggedIn);
+      },
+      error: (error: any) => {
+        console.error('Error checking authentication status:', error);
+      }
     });
   }
 
-  openLoginDialog() {
+  openLoginDialog(): void {
     this.dialog.open(LoginDialogComponent);
   }
 
@@ -67,6 +78,9 @@ export class AppComponent implements OnInit {
     this.authService.logout().then(() => {
       this.isLoggedIn = false;
       this.snackBar.open('Sie wurden abgemeldet.', 'Close', { duration: 3000 });
+    }).catch((error: any) => {
+      console.error('Error during logout:', error);
+      this.snackBar.open('Error during logout.', 'Close', { duration: 3000 });
     });
   }
 }
